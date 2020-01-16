@@ -1,5 +1,3 @@
-import uuid
-
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
@@ -9,10 +7,7 @@ from django.contrib.auth.validators import ASCIIUsernameValidator
 from .managers import UserManager
 
 
-def _Profile_image_path(instance, filename):
-    ext = filename.split('.')[-1]
-    filename = f'{uuid.uuid4()}.{ext}'
-    return os.path.join('profile_pictures/', filename)
+from .utils import GEN_CHOICE, _Profile_image_path
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -27,7 +22,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     email = models.EmailField(_("Email"), max_length=50, unique=True)
 
-    gender = models.CharField(_("Gender"), max_length=50)
+    gender = models.CharField(_("Gender"), max_length=50, choices=GEN_CHOICE)
 
     dob = models.DateField(_("Birth Date"), null=True, blank=True)
 
